@@ -1,0 +1,9 @@
+# Assignment 1 for Bioinformatics Analysis and Visualisation of Medical Genomics Data Course
+# Task 1 - Literature
+# Task 2 - Git repositories and R Markdown
+# Task 3 - Introduction to R and online R course
+# Task 4 - R basic operations
+# Task 5 - Using R example datasets
+# Task 6 - R Functions
+# Task 7 - Basic visualization with R
+# Task 8 - Other tasks
