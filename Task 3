@@ -1,0 +1,41 @@
+### Task 3 - Introduction to R and online R course ###
+
+● Install the most recent version of the R software on your computer by following the
+instructions provided at the R software website.
+● Install the most recent version of RStudio Desktop (Open Source version) on your
+computer.
+● Bioconductor is an add-on package for R providing tools for the analysis and
+comprehension of high-throughput genomic data.
+Install the most recent version of the Bioconductor package on your computer.
+● Tidyverse is a toolbox for streamlining data import, modeling, transformation,
+curation, and visualization. Tidyverse tools enable you to make your scripts more
+reader friendly and overall more neat and efficient.
+https://www.tidyverse.org/packages/
+○ Tidyverse has a powerful visualization package called ggplot2 that we
+recommend using. With ggplot2, you have more control over your plot’s
+parameters than with the basic R plotting functions.
+https://ggplot2.tidyverse.org/#learning-ggplot2
+● [Optional] Conduct the R online course available here:
+○ Introduction to R (hands-on exercises, strongly encouraged)
+https://campus.datacamp.com/courses/free-introduction-to-r
+(the course is completely free, but asks after every completed level to sign up
+for a license, which can be circumvented by going back to the course list)
+● Alternative resources for R
+https://www.datacamp.com/community/open-courses/r-for-the-intimidated
+● R also provides an internal learning package named Swirl. Swirl is interactive
+and gives feedback on your progress. https://swirlstats.com/
+Depending on your previous experiences with R, taking this R online course might
+take more or less time. Please make sure to understand the concepts behind the
+exercises.
+● [Optional] You can consider using R-notebooks for Assignment 1. It is up to your
+preferences.
+● Reference for R language
+https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf
+● [Optional] More information on R Markdown and the Markdown cheatsheet
+https://rmarkdown.rstudio.com
+https://raw.githubusercontent.com/rstudio/cheatsheets/master/rmarkdown-2.0.pdf
+(opening the link will download the cheat sheet on your computer)
+
+Installed R studio and packages as requested.
+
+### End of the file ###
