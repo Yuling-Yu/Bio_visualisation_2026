@@ -1,3 +1,5 @@
+### Task 1 ###
+
 # 1. Read the research article of the hands-on working group you are assigned to (see file
 “Student Groups.pdf” in shared folder General course material).
 Kameneva P, Artemov AV, Kastriti ME, et al. Single-cell transcriptomics of human embryos identifies multiple 
@@ -6,15 +8,31 @@ Link: https://doi.org/10.1038/s41588-021-00818-x
 
 # 2. Answer the following questions
 a. What is the medically relevant insight from the article?
+The study reveals that neuroblastoma may originate from distinct embryonic cell lineages, particularly Schwann cell 
+precursors in the adrenal gland. This provides important insight into the developmental biology of neuroblastoma.
 
 b. Which genomics technology/ technologies were used?
-
-
+Single cell RNA sequencing analysis
+Single-cell transcriptomic analysis
+RNA velocity analysis
 
 # 3. Further related research questions
 a. List and explain at least three questions/ hypotheses you can think of that
 extend the analysis presented in the paper.
+1) Which genes regulate the transformation of Schwann cell precursors into sympathoblasts?
+The study identifies developmental origins. Researchers coudld further investigate the upstream mechanisms controlling them. 
+For example, researchers could examine genes involved in cell proliferation, differentiation and survival, and pssibly 
+reveal potential therapeutic targets for neuroblastoma.
+
+2) Do different developmental origins of neuroblastoma respond different to chemotherapy?
+Neuroblastomas derived from different embryonic precursor populations might have different sensitivity to chemotheraphy or
+possibly responds differently to medication.
+
+3) Do sympathoblasts originating from different precursor cells have different risks of developing into neuroblastoma?
+Different origins might have different gene expressions and different developmental paths. These might influence on the 
+risk and prognosis of neuroblastoma.
 
 b. [Optional] Devise a computational analysis strategy for (some of) the listed
 questions under 3a.
-###
+
+### End of the file ###
