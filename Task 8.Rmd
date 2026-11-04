@@ -1,0 +1,179 @@
+---
+title: "Task 8"
+output: html_document
+date: "2026-11-04"
+---
+
+#1. Install the Tidybiology package, which includes the data ‘chromosome’ and ‘proteins’
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pkgbuild::check_build_tools(debug = TRUE)
+install.packages("devtools")
+devtools::install_github("hirscheylab/tidybiology")
+pak::pak("user/repo")
+library(tidybiology)
+library(devtools)
+library(dplyr)
+```
+
+a. Extract summary statistics (mean, median and maximum) for the following
+variables from the ‘chromosome’ data: variations, protein coding genes, and
+miRNAs. Utilize the tidyverse functions to make this as simply as possible.
+
+```{r}
+data("chromosome")
+chromosome %>%
+  summarise(
+    mean_variations = mean(variations, na.rm = TRUE),
+    median_variations = median(variations, na.rm = TRUE),
+    max_variations = max(variations, na.rm = TRUE),
+
+    mean_genes = mean(protein_codinggenes, na.rm = TRUE),
+    median_genes = median(protein_codinggenes, na.rm = TRUE),
+    max_genes = max(protein_codinggenes, na.rm = TRUE),
+
+    mean_miRNAs = mean(mi_rna, na.rm = TRUE),
+    median_miRNAs = median(mi_rna, na.rm = TRUE),
+    max_miRNAs = max(mi_rna, na.rm = TRUE)
+  )
+```
+
+
+b. How does the chromosome size distribute? Plot a graph that helps to
+visualize this by using ggplot2 package functions.
+
+```{r}
+library(ggplot2)
+
+ggplot(chromosome, aes(x = length_mm)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 30,
+    fill = "skyblue",
+    colour = "black",
+    alpha = 0.7
+  ) +
+  geom_density(
+    colour = "red",
+    linewidth = 1.2
+  ) +
+  labs(
+    title = "Distribution of Chromosome Size",
+    x = "Chromosome size",
+    y = "Density"
+  ) +
+  theme_classic()
+```
+
+
+c. Does the number of protein coding genes or miRNAs correlate with the length
+of the chromosome? Make two separate plots to visualize these relationships.
+
+```{r}
+#A.Chromosome Length vs Protein-Coding Genes
+ggplot(chromosome, aes(x = length_mm, y = protein_codinggenes)) +
+  geom_point(size = 3, alpha = 0.7, colour = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, colour = "red") +
+  labs(
+    title = "Chromosome Length vs Protein-Coding Genes",
+    x = "Chromosome length",
+    y = "Number of protein-coding genes"
+  ) +
+  theme_classic()
+
+#B.Chromosome Length vs miRNAs
+ggplot(chromosome, aes(x = length_mm, y = mi_rna)) +
+  geom_point(size = 3, alpha = 0.7, colour = "darkgreen") +
+  geom_smooth(method = "lm", se = TRUE, colour = "red") +
+  labs(
+    title = "Chromosome Length vs miRNAs",
+    x = "Chromosome length",
+    y = "Number of miRNAs"
+  ) +
+  theme_classic()
+
+```
+
+
+d. Calculate the same summary statistics for the ‘proteins’ data variables length
+and mass. Create a meaningful visualization of the relationship between
+these two variables by utilizing the ggplot2 package functions. Play with the
+colors, theme- and other visualization parameters to create a plot that pleases you.
+
+```{r}
+data("proteins")
+
+proteins %>%
+  summarise(
+    mean_length = mean(length_mm, na.rm = TRUE),
+    median_length = median(length_mm, na.rm = TRUE),
+    max_length = max(length_mm, na.rm = TRUE),
+
+    mean_mass = mean(mass, na.rm = TRUE),
+    median_mass = median(mass, na.rm = TRUE),
+    max_mass = max(mass, na.rm = TRUE)
+  )
+
+sapply(proteins[c("length", "mass")], function(x) {
+  c(
+    Mean = mean(x, na.rm = TRUE),
+    Median = median(x, na.rm = TRUE),
+    Maximum = max(x, na.rm = TRUE)
+  )
+})
+
+ggplot(proteins, aes(x = length, y = mass)) +
+
+  geom_point(
+    colour = "#2878B5",
+    alpha = 0.55,
+    size = 2.5
+  ) +
+
+  geom_smooth(
+    method = "lm",
+    se = TRUE,
+    colour = "#D9534F",
+    fill = "#F4A6A6",
+    linewidth = 1.2,
+    alpha = 0.2
+  ) +
+
+  labs(
+    title = "Relationship Between Protein Length and Mass",
+    subtitle = "Scatter plot with fitted linear regression",
+    x = "Protein length (amino acids)",
+    y = "Protein mass",
+    caption = "Red line represents the linear regression fit; shaded area represents 95% CI."
+  ) +
+
+  theme_minimal(base_size = 13) +
+
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16,
+      colour = "#263238"
+    ),
+    plot.subtitle = element_text(
+      colour = "grey40",
+      size = 11
+    ),
+    axis.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(
+      colour = "grey88",
+      linewidth = 0.4
+    ),
+    plot.background = element_rect(
+      fill = "#FAFCFE",
+      colour = NA
+    )
+  )
+
+```
+
+
+### End of the program ###
