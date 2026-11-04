@@ -1,0 +1,236 @@
+---
+title: "Task 7"
+output: html_document
+date: "2026-11-04"
+---
+
+## Task 7 - Basic visualization with R ##
+
+Comment: Files are provided in the shared Google Drive folder under Course week 1.Examples of how to use visualization functions in R and other highly useful information that may aid you during the course can be found here
+<https://biotechnoalchemist.github.io/Teaching2025/>
+The nummenmaa-package mentioned within the examples can be installed with the code below if you wish to try some of the examples yourself.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("remotes")
+```
+
+```{r}
+library(remotes)
+library(readr)
+install_url("http://emotion.utu.fi/wp-content/uploads/2019/11/nummenmaa_1.0.tar.gz",dependencies=TRUE)
+
+setwd("Z:/My work/Course/Bioinformatics Analysis and Visualisation of Medical Genomics Data/Assignment 1")
+magic_guys <- read_csv("magic_guys.csv")
+```
+
+
+#1. Compare the distributions of the body heights of the two species from the #'magic_guys.csv' dataset graphically
+
+a. using the basic 'hist' function as well as ‘ggplot’ and ‘geom_histogram’
+functions from the ggplot2 package. Optimize the plots for example by trying
+several different 'breaks'. Note that ggplot2-based functions give you many
+more options for changing the visualization parameters, try some of them.
+
+```{r}
+# Inspect the dataset
+head(magic_guys)
+str(magic_guys)
+summary(magic_guys)
+
+# Use ggplot2 to create histogram
+library(ggplot2)
+
+hist_guys <- ggplot(magic_guys, aes(x = length, fill = species)) +
+  geom_histogram(bins = 10,
+                 color = "black",
+                 alpha = 0.7) +
+  facet_wrap(~species) +
+  scale_fill_manual(values = c("jedi" = "blue",
+                               "sith" = "red")) +
+  labs(title = "Body height distribution: Jedi vs Sith",
+       x = "Body height",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+b. Do the same comparison as in a. but with boxplots. If you want to use the
+ggplot2-package, use the functions ‘ggplot’ and ‘geom_boxplot’.
+
+```{r}
+box_guys <- ggplot(magic_guys, aes(x = species,
+                       y = length,
+                       fill = species)) +
+  geom_boxplot(width = 0.5,
+               alpha = 0.7,
+               outlier.color = "black",
+               outlier.shape = 16) +
+  scale_fill_manual(values = c("jedi" = "blue",
+                               "sith" = "red")) +
+  labs(title = "Body height distribution of Jedi and Sith",
+       x = "Species",
+       y = "Body height") +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+c. Save the plots with the ‘png’, ‘pdf’, and ‘svg’ formats. In which situation would
+you use which file format?
+
+```{r}
+# Save as "png".
+ggsave("Task7_histogram.png",
+       plot = hist_guys,
+       width = 8,
+       height = 6,
+       dpi = 300)
+
+# Save as "pdf"
+ggsave("Task7_boxplot.pdf",
+       plot = box_guys,
+       width = 8,
+       height = 6)
+
+# Save as "svg"
+install.packages("svglite")
+library(svglite)
+ggsave("Task_boxplot.svg",
+       plot = box_guys,
+       width = 8,
+       height = 6,
+       device = "svg")
+```
+When I need to include the figures for manuscript publication, I would generate "png" or "pdf" or "svg" for high resolution formats, as requsted by journals specifically.
+
+
+#2. Load the gene expression data matrix from the ‘microarray_data.tab’ dataset
+#provided in the shared folder, it is a big tabular separated matrix.
+
+```{r}
+microarray_data <- read.delim("microarray_data.tab",
+                              header = TRUE)
+```
+
+a. How big is the matrix in terms of rows and columns?
+
+```{r}
+dim(microarray_data)
+nrow(microarray_data)  # Number of rows
+ncol(microarray_data)  # Number of columns
+```
+
+
+b. Count the missing values per gene and visualize this result.
+
+```{r}
+# Count missing values for each gene
+missing_per_gene <- colSums(is.na(microarray_data))
+
+# Display the results
+head(missing_per_gene)
+
+missing_data <- data.frame(
+  Gene = colnames(microarray_data),
+  Missing_values = missing_per_gene
+)
+
+ggplot(missing_data, aes(x = Missing_values)) +
+  geom_histogram(binwidth = 1,
+                 fill = "steelblue",
+                 color = "black") +
+  labs(title = "Distribution of missing values per gene",
+       x = "Number of missing values",
+       y = "Number of genes") +
+  theme_minimal()
+```
+
+
+c. Find the genes for which there are more than X% (X=10%, 20%, 50%)
+missing values.
+
+```{r}
+# Calculate percentage of missing values per gene
+missing_percentage <- colMeans(is.na(microarray_data)) * 100
+
+# Create a data frame for missing percentage of all genes
+missing_percent <- data.frame(
+  Gene = colnames(microarray_data),
+  Missing_percentage = missing_percentage
+)
+
+head(missing_percent)
+
+# 10%
+genes_10 <- missing_percent[
+  missing_percent$Missing_percentage > 10, ]
+genes_10
+
+# 20%
+genes_20 <- missing_percent[
+  missing_percent$Missing_percentage > 20, ]
+genes_20
+
+# 50%
+genes_50 <- missing_percent[
+  missing_percent$Missing_percentage > 50, ]
+genes_50
+
+```
+
+
+d. Replace the missing values by the average expression value for the particular
+gene. (Note: Imputing data has to be used with caution!)
+
+```{r}
+gene_means <- colMeans(microarray_data, na.rm = TRUE)
+which(is.na(gene_means)) 
+sum(is.na(gene_means)) 
+
+# Copy original dataset
+microarray_data_clean <- microarray_data
+
+# Replace missing with gene mean
+for (i in 1:ncol(microarray_data_clean)) {
+  microarray_data_clean[i, is.na(microarray_data_clean[i, ])] <- gene_means[i]
+}
+
+# Final check
+sum(is.na(microarray_data_clean))
+
+## NOTE!! 34 genes have all missing values, not able to replace
+
+```
+
+
+#3. Visualize the data in the CO2 dataset in a way that gives you a deeper understanding
+#of the data. What do you see?
+  
+```{r}
+data("CO2")
+
+#A.Relationship between CO2 concentration and uptake 
+ggplot(CO2, aes(x = conc, y = uptake)) +
+  geom_point(color = "steelblue", size = 3) +
+  geom_smooth(method = "loess", se = TRUE) +
+  labs(title = "CO2 uptake versus CO2 concentration",
+       x = "CO2 concentration",
+       y = "CO2 uptake") +
+  theme_minimal()
+
+#B.Effect of treatment on CO2 uptake
+ggplot(CO2, aes(x = Treatment,
+                y = uptake,
+                fill = Treatment)) +
+  geom_boxplot() +
+  labs(title = "Effect of treatment on CO2 uptake",
+       x = "Treatment",
+       y = "CO2 uptake") +
+  theme_minimal()
+
+```
+
+
+### End of the program ###
+
+
